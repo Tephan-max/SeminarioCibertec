@@ -1,0 +1,26 @@
+﻿@model SeminarioCibertec.Models.Seminario
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Curso</th>
+        <th>Horario</th>
+        <th>Capacidad</th>
+    </tr>
+    <tr>
+        <td>@Model.SeminarioId</td>
+        <td>@Model.Curso</td>
+        <td>@Model.Horario</td>
+        <td>@Model.Capacidad</td>
+    </tr>
+</table>
+
+<form method="post" asp-action="Registrar">
+    <input name="idSeminario" value="@Model.SeminarioId" hidden></input>
+    <input placeholder="Codigo de estudiante" name="idEstudiante"/>
+    <button type="submit">Registrar</button>
+</form>
+
+@if(TempData["mensaje"] != null){
+    <p>@TempData["mensaje"]</p>
+}

@@ -1,0 +1,28 @@
+﻿@model List<SeminarioCibertec.Models.Seminario>
+
+@if (Model.Any())
+{
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Curso</th>
+        <th>Horario</th>
+        <th>Capacidad</th>
+        <th>Estudiante</th>
+    </tr>
+    @foreach (var m in Model)
+        {
+            <tr>
+                <td>@m.SeminarioId</td>
+                <td>@m.Curso</td>
+                <td>@m.Horario</td>
+                <td>@m.Capacidad</td>
+                <td><a asp-action="Registrar" asp-route-id="@m.SeminarioId">Agregar</a></td>
+            </tr>
+        }
+
+    </table>
+} else
+{
+    <p>No hay seminario</p>
+}

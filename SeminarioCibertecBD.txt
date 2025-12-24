@@ -1,0 +1,45 @@
+CREATE TABLE [dbo].[Seminario]
+(
+	[SeminarioId] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
+    [Curso] NVARCHAR(50) NOT NULL, 
+    [Horario] NVARCHAR(50) NOT NULL, 
+    [Capacidad] INT NOT NULL
+)
+
+CREATE TABLE [dbo].[RegistroAsistencia] (
+    [Registro]     INT           IDENTITY (1, 1) NOT NULL,
+    [SeminarioId]  INT           NOT NULL,
+    [EstudianteId] NVARCHAR (20) NOT NULL,
+    [Fecha]        DATE          DEFAULT CAST(GETDATE() AS DATE),
+    CONSTRAINT [PK_RegistroAsistencia] PRIMARY KEY CLUSTERED ([SeminarioId] ASC, [EstudianteId] ASC),
+    CONSTRAINT [FK_SeminarioId] FOREIGN KEY ([SeminarioId]) REFERENCES [dbo].[Seminario] ([SeminarioId])
+);
+
+
+CREATE PROCEDURE [dbo].[listaSeminariosConCapacidad]
+AS
+	SELECT * FROM Seminario AS S WHERE S.Capacidad > 0
+	ORDER BY S.Capacidad DESC
+
+
+CREATE PROCEDURE [dbo].[registrarAsistencia]
+	@seminarioId int,
+	@estudianteId nvarchar(20),
+	@fecha date
+AS
+	BEGIN
+		INSERT INTO RegistroAsistencia(SeminarioId, EstudianteId, Fecha) 
+		VALUES(@seminarioId, @estudianteId, @fecha)
+	
+		UPDATE Seminario SET Capacidad = Capacidad - 1 
+		WHERE SeminarioId = @seminarioId;
+	END
+
+INSERT INTO [dbo].[Seminario] (Curso, Horario, Capacidad)
+VALUES
+('Matemática Básica', 'Lunes y Miércoles 08:00 - 10:00', 30),
+('Programación en C#', 'Martes y Jueves 10:00 - 12:00', 25),
+('Bases de Datos', 'Lunes y Viernes 14:00 - 16:00', 35),
+('Algoritmos', 'Miércoles 16:00 - 18:00', 20),
+('Desarrollo Web', 'Sábado 09:00 - 13:00', 40),
+('Estructuras de Datos', 'Viernes 18:00 - 20:00', 28);
